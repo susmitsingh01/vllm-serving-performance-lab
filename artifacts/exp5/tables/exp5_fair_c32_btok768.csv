@@ -1,0 +1,6 @@
+latency_s,prompt_tokens,completion_tokens,total_tokens,status_code,prompt_tokens_est,max_tokens_used,trimmed,prompt_tokens_est_original,original_prompt_len_chars,final_prompt_len_chars,ok
+3.036116,37,16,53,200,37,16,True,37,36,36,True
+3.129861,37,16,53,200,37,16,True,37,36,36,True
+3.074753,45,16,61,200,45,16,True,45,72,72,True
+3.09251,37,16,53,200,37,16,True,37,38,38,True
+3.141762,38,16,54,200,38,16,True,38,38,38,True

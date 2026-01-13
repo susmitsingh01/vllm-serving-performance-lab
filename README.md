@@ -1,5 +1,7 @@
 
 # vLLM Serving Performance Lab: Tail Latency and Throughput Under Mixed Prompt Lengths (Short vs Long vs Overall p99)
+**Quick links:** [Open in Colab](https://colab.research.google.com/drive/16_GJlYLGUKrZwf0lfQfSVbHuzFugCpjn?usp=sharing) · [Notebook (PDF)](notebook/vllm_serving_project.pdf) · [Artifacts (plots + CSVs)](artifacts/)
+
 
 ## Project Summary
 

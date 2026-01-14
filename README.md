@@ -94,5 +94,30 @@ With dynamic budgeting enabled, the same workloads complete **without failures**
 #### Artifacts
 **Summary table:** [`artifacts/exp1_1/tables/exp01_1_results_summary.csv`](artifacts/exp1_1/tables/exp01_1_results_summary.csv)
 
+### Experiment 2 — Deliberately “Bad/Unfair” Baseline (Head-of-Line Blocking)
+
+**Goal:** Create a **known-bad baseline** that reproduces real failure modes under mixed prompt lengths—especially **head-of-line (HoL) blocking**, where long-prefill requests dominate batching and delay short requests. This also demonstrates that **even with chunked prefill available (vLLM v1)**, **poor knob choices can diminish its benefits**.
+
+**Rationale:** If we can make the system fail predictably with a “bad” config, then later experiments can show which knobs actually fix the bottlenecks (and how much).
+
+**What makes the config “bad”:**
+- Set **`--max-num-batched-tokens` very high** (e.g., 8192) while leaving **`--max-num-seqs` unconstrained/high**.
+- This encourages vLLM to pack **large prefills** into a batch.
+- Under mixed workloads, long prompts can consume most of the batch budget → **short requests wait behind long prefills** → short p99 inflates.
+
+**Workload:** Mixed prompt-length JSONL (e.g., 50/50 short vs long).  
+**Metrics tracked:** RPS + **overall p50/p90/p99** + **short p99 vs long p99** (to quantify mixed-workload interference).
+
+#### Expected behavior / failure mode
+- **Overall p99 grows sharply** as queueing increases.
+- **Short p99 approaches long p99** (short requests get “dragged” by long-prefill batches).
+- Throughput may look “okay-ish” while tails become unacceptable → classic **throughput vs tail** trap.
+
+#### Artifacts
+**Summary table:** [`artifacts/exp2/tables/expt2_results_bad_config.csv`](artifacts/exp2/tables/expt2_results_bad_config.csv)
+
+
+
+
 
 

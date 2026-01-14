@@ -54,10 +54,15 @@ As the workload includes more long prompts, **tail latency increases and through
   `artifacts/exp1/plots/exp01_throughput_rps_by_workload.png`  
   ![exp01 throughput](artifacts/exp1/plots/exp01_throughput_rps_by_workload.png)
 
-- Latency histograms:  
-  `artifacts/exp1/plots/exp01_latency_hist_short_only.png`  
-  `artifacts/exp1/plots/exp01_latency_hist_mix_90_10.png`  
-  `artifacts/exp1/plots/exp01_latency_hist_mix_70_30.png`
+- Latency histograms
+
+| short_only | mix_90_10 |
+|---|---|
+| ![](artifacts/exp1/plots/exp01_latency_hist_short_only.png) | ![](artifacts/exp1/plots/exp01_latency_hist_mix_90_10.png) |
+
+| mix_70_30 |  |
+|---|---|
+| ![](artifacts/exp1/plots/exp01_latency_hist_mix_70_30.png) |  |
 
 
 

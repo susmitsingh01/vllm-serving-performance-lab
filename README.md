@@ -136,23 +136,42 @@ With dynamic budgeting enabled, the same workloads complete **without failures**
 
 **Plots (Exp 3):**
 
-<p>
-  <img src="artifacts/exp3/plots/bad_throughput_vs_concurrency.png" width="49%" />
-  <img src="artifacts/exp3/plots/bad_p99_s_vs_concurrency.png" width="49%" />
-</p>
+|  |  |
+|---|---|
+| <img src="artifacts/exp3/plots/bad_throughput_vs_concurrency.png" width="460"/> | <img src="artifacts/exp3/plots/bad_p99_s_vs_concurrency.png" width="460"/> |
+| <img src="artifacts/exp3/plots/bad_p50_s_vs_concurrency.png" width="460"/> | <img src="artifacts/exp3/plots/bad_p90_s_vs_concurrency.png" width="460"/> |
+| <img src="artifacts/exp3/plots/bad_p99_vs_rps.png" width="460"/> | <img src="artifacts/exp3/plots/bad_short_long_p99_vs_concurrency.png" width="460"/> |
+| <img src="artifacts/exp3/plots/bad_tail_inflation_vs_concurrency.png" width="460"/> | &nbsp; |
 
-<p>
-  <img src="artifacts/exp3/plots/bad_p50_s_vs_concurrency.png" width="49%" />
-  <img src="artifacts/exp3/plots/bad_p90_s_vs_concurrency.png" width="49%" />
-</p>
 
-<p>
-  <img src="artifacts/exp3/plots/bad_p99_vs_rps.png" width="49%" />
-  <img src="artifacts/exp3/plots/bad_short_long_p99_vs_concurrency.png" width="49%" />
-</p>
+### Experiment 4 — 2D Sweep: Concurrency × `max_num_seqs` (BAD / unfair config)
 
-<p>
-  <img src="artifacts/exp3/plots/bad_tail_inflation_vs_concurrency.png" width="49%" />
-  <img src="artifacts/exp3/plots/_blank.png" width="49%" />
-</p>
+**Goal:** Stress-test a deliberately “bad” vLLM configuration on a mixed workload (`mix_50_50`) and quantify how **throughput** and **tail latency** behave as we increase (1) client concurrency and (2) server admission capacity (`max_num_seqs`). This exposes **where throughput stops scaling**, where **queueing dominates**, and how **long-prefill contention** inflates tail latency.
+
+**Workload:** `mix_50_50.jsonl`  
+**Sweep:** `concurrency ∈ {1,2,4,8,16,32,48,64}` × `max_num_seqs ∈ {16,32,48,64,80,96}`  
+**Per run:** 200 requests, `desired_max_tokens=16` (token-budgeted)
+
+#### Key takeaways (with rough numbers)
+- **Throughput scaling + knee:** RPS increases with concurrency, but shows **diminishing returns around ~c=32** for many settings.  
+  Example: with smaller admission (`max_num_seqs=16`), RPS grows from **~1.3 (c=1)** → **~11.0 (c=16)** → **~13.6 (c=64)** (flattening beyond ~c=32).
+
+- **Tail latency inflation under load:** Tail grows much faster than median once queueing kicks in.  
+  Example (`max_num_seqs=16`): **short p99 ~0.46s (c=1)** → **~1.88s (c=16)** → **~5.55s (c=64)**.  
+  Long requests also inflate: **long p99 ~1.31s (c=1)** → **~2.24s (c=16)** → **~5.95s (c=64)**.
+
+- **Effect of `max_num_seqs`:** Larger `max_num_seqs` can unlock higher mid/high-load throughput, but can **worsen tails** if it admits too many sequences and amplifies contention/queueing in this BAD setup.  
+  At high load (`c=64`), RPS reaches **~20 rps** in the best cases (e.g., `max_num_seqs≈64–80`), but tails can still be several seconds (and worse for overly-admissive settings like `max_num_seqs=96`).
+
+#### Artifacts
+**Summary table:** [`artifacts/exp4/tables/exp4_result_summary.csv`](artifacts/exp4/tables/exp4_result_summary.csv)
+
+**Plots (Exp 4):**
+
+|  |  |
+|---|---|
+| <img src="artifacts/exp4/plots/exp4_bad_grid_rps_heatmap.png" width="460"/> | <img src="artifacts/exp4/plots/exp4_bad_grid_short_p99_heatmap.png" width="460"/> |
+| <img src="artifacts/exp4/plots/exp4_bad_grid_long_p99_heatmap.png" width="460"/> | <img src="artifacts/exp4/plots/exp4_bad_rps_vs_concurrency_by_max_num_seqs.png" width="460"/> |
+| <img src="artifacts/exp4/plots/exp4_bad_short_p99_vs_concurrency_by_max_num_seqs.png" width="460"/> | <img src="artifacts/exp4/plots/exp4_bad_long_p99_vs_concurrency_by_max_num_seqs.png" width="460"/> |
+
 

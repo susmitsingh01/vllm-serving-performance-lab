@@ -117,7 +117,42 @@ With dynamic budgeting enabled, the same workloads complete **without failures**
 **Summary table:** [`artifacts/exp2/tables/expt2_results_bad_config.csv`](artifacts/exp2/tables/expt2_results_bad_config.csv)
 
 
+### Experiment 3 — Concurrency Sweep (BAD/Unfair Baseline)
 
+**Goal:** Hold workload constant (`mix_50_50`) and sweep **concurrency** to measure how **throughput (RPS)** and **tail latency** evolve as the system transitions into queueing/backlog.
 
+**Setup:** `mix_50_50.jsonl`, `max_tokens=16`, total requests = **200** per run  
+**Concurrency sweep:** `1, 2, 4, 8, 16, 32, 48, 64`  
+**Label:** `BAD_unfair` (deliberately poor config to surface interference)
 
+#### Takeaways
+- **Throughput rises then saturates (knee around `c≈16–32`)**: RPS climbs quickly (`~1.3 → ~5.9`) by **c=16**, then largely **flattens** (`~5.9–6.0`) while latency keeps worsening.
+- **Tail latency inflates fast after the knee**: overall **p99 jumps ~6.2s → ~9.5s → ~13.8s → ~21.7s** as `c=16 → 32 → 48 → 64`.
+- **Short requests get punished by long-prefill contention**: short **p99 grows ~4.0s → ~7.2s → ~11.3s → ~15.8s** from `c=16 → 32 → 48 → 64` (classic mixed-workload interference).
+- **Overall p99 tracks long-prefill pressure**: long **p99 ~6.2s (c=16) → ~10.2s (c=32) → ~21.9s (c=64)**, and overall p99 follows the same curve.
+
+#### Artifacts
+**Summary table:** [`artifacts/exp3/tables/exp3_results.csv`](artifacts/exp3/tables/exp3_results.csv)
+
+**Plots (Exp 3):**
+
+<p>
+  <img src="artifacts/exp3/plots/bad_throughput_vs_concurrency.png" width="49%" />
+  <img src="artifacts/exp3/plots/bad_p99_s_vs_concurrency.png" width="49%" />
+</p>
+
+<p>
+  <img src="artifacts/exp3/plots/bad_p50_s_vs_concurrency.png" width="49%" />
+  <img src="artifacts/exp3/plots/bad_p90_s_vs_concurrency.png" width="49%" />
+</p>
+
+<p>
+  <img src="artifacts/exp3/plots/bad_p99_vs_rps.png" width="49%" />
+  <img src="artifacts/exp3/plots/bad_short_long_p99_vs_concurrency.png" width="49%" />
+</p>
+
+<p>
+  <img src="artifacts/exp3/plots/bad_tail_inflation_vs_concurrency.png" width="49%" />
+  <img src="artifacts/exp3/plots/_blank.png" width="49%" />
+</p>
 

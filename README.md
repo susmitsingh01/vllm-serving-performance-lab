@@ -49,20 +49,49 @@ As the workload includes more long prompts, **tail latency increases and through
 
 **Plots (Exp 1):**
 
-| Latency percentiles by workload | Throughput (RPS) by workload |
-|---|---|
-| ![](artifacts/exp1/plots/exp01_latency_percentiles_by_workload.png) | ![](artifacts/exp1/plots/exp01_throughput_rps_by_workload.png) |
+<table>
+  <tr>
+    <th align="center">Latency percentiles by workload</th>
+    <th align="center">Throughput (RPS) by workload</th>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="artifacts/exp1/plots/exp01_latency_percentiles_by_workload.png" width="460"/>
+    </td>
+    <td align="center">
+      <img src="artifacts/exp1/plots/exp01_throughput_rps_by_workload.png" width="460"/>
+    </td>
+  </tr>
 
+  <tr>
+    <th align="center" colspan="2">Latency histograms</th>
+  </tr>
 
-- Latency histograms
+  <tr>
+    <th align="center">short_only</th>
+    <th align="center">mix_90_10</th>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="artifacts/exp1/plots/exp01_latency_hist_short_only.png" width="460"/>
+    </td>
+    <td align="center">
+      <img src="artifacts/exp1/plots/exp01_latency_hist_mix_90_10.png" width="460"/>
+    </td>
+  </tr>
 
-| short_only | mix_90_10 |
-|---|---|
-| ![](artifacts/exp1/plots/exp01_latency_hist_short_only.png) | ![](artifacts/exp1/plots/exp01_latency_hist_mix_90_10.png) |
+  <tr>
+    <th align="center">mix_70_30</th>
+    <th align="center"></th>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="artifacts/exp1/plots/exp01_latency_hist_mix_70_30.png" width="460"/>
+    </td>
+    <td align="center">&nbsp;</td>
+  </tr>
+</table>
 
-| mix_70_30 |  |
-|---|---|
-| ![](artifacts/exp1/plots/exp01_latency_hist_mix_70_30.png) |  |
 
 
 ### Experiment 1.1 — Dynamic Context Budgeting (Prevent Token-Limit 400s)
@@ -136,12 +165,58 @@ With dynamic budgeting enabled, the same workloads complete **without failures**
 
 **Plots (Exp 3):**
 
-|  |  |
-|---|---|
-| <img src="artifacts/exp3/plots/bad_throughput_vs_concurrency.png" width="460"/> | <img src="artifacts/exp3/plots/bad_p99_s_vs_concurrency.png" width="460"/> |
-| <img src="artifacts/exp3/plots/bad_p50_s_vs_concurrency.png" width="460"/> | <img src="artifacts/exp3/plots/bad_p90_s_vs_concurrency.png" width="460"/> |
-| <img src="artifacts/exp3/plots/bad_p99_vs_rps.png" width="460"/> | <img src="artifacts/exp3/plots/bad_short_long_p99_vs_concurrency.png" width="460"/> |
-| <img src="artifacts/exp3/plots/bad_tail_inflation_vs_concurrency.png" width="460"/> | &nbsp; |
+<table>
+  <tr>
+    <th align="center">Throughput vs concurrency</th>
+    <th align="center">Overall p99 vs concurrency</th>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="artifacts/exp3/plots/bad_throughput_vs_concurrency.png" width="460"/>
+    </td>
+    <td align="center">
+      <img src="artifacts/exp3/plots/bad_p99_s_vs_concurrency.png" width="460"/>
+    </td>
+  </tr>
+
+  <tr>
+    <th align="center">Overall p50 vs concurrency</th>
+    <th align="center">Overall p90 vs concurrency</th>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="artifacts/exp3/plots/bad_p50_s_vs_concurrency.png" width="460"/>
+    </td>
+    <td align="center">
+      <img src="artifacts/exp3/plots/bad_p90_s_vs_concurrency.png" width="460"/>
+    </td>
+  </tr>
+
+  <tr>
+    <th align="center">p99 vs RPS</th>
+    <th align="center">Short vs Long p99 vs concurrency</th>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="artifacts/exp3/plots/bad_p99_vs_rps.png" width="460"/>
+    </td>
+    <td align="center">
+      <img src="artifacts/exp3/plots/bad_short_long_p99_vs_concurrency.png" width="460"/>
+    </td>
+  </tr>
+
+  <tr>
+    <th align="center">Tail inflation vs concurrency</th>
+    <th align="center"></th>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="artifacts/exp3/plots/bad_tail_inflation_vs_concurrency.png" width="460"/>
+    </td>
+    <td align="center">&nbsp;</td>
+  </tr>
+</table>
+
 
 
 ### Experiment 4 — 2D Sweep: Concurrency × `max_num_seqs` (BAD / unfair config)
@@ -168,10 +243,232 @@ With dynamic budgeting enabled, the same workloads complete **without failures**
 
 **Plots (Exp 4):**
 
-|  |  |
-|---|---|
-| <img src="artifacts/exp4/plots/exp4_bad_grid_rps_heatmap.png" width="460"/> | <img src="artifacts/exp4/plots/exp4_bad_grid_short_p99_heatmap.png" width="460"/> |
-| <img src="artifacts/exp4/plots/exp4_bad_grid_long_p99_heatmap.png" width="460"/> | <img src="artifacts/exp4/plots/exp4_bad_rps_vs_concurrency_by_max_num_seqs.png" width="460"/> |
-| <img src="artifacts/exp4/plots/exp4_bad_short_p99_vs_concurrency_by_max_num_seqs.png" width="460"/> | <img src="artifacts/exp4/plots/exp4_bad_long_p99_vs_concurrency_by_max_num_seqs.png" width="460"/> |
+<table>
+  <tr>
+    <th align="center">BAD grid: RPS heatmap</th>
+    <th align="center">BAD grid: short p99 heatmap</th>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="artifacts/exp4/plots/exp4_bad_grid_rps_heatmap.png" width="460"/>
+    </td>
+    <td align="center">
+      <img src="artifacts/exp4/plots/exp4_bad_grid_short_p99_heatmap.png" width="460"/>
+    </td>
+  </tr>
+
+  <tr>
+    <th align="center">BAD grid: long p99 heatmap</th>
+    <th align="center">BAD: RPS vs concurrency (by max-num-seqs)</th>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="artifacts/exp4/plots/exp4_bad_grid_long_p99_heatmap.png" width="460"/>
+    </td>
+    <td align="center">
+      <img src="artifacts/exp4/plots/exp4_bad_rps_vs_concurrency_by_max_num_seqs.png" width="460"/>
+    </td>
+  </tr>
+
+  <tr>
+    <th align="center">BAD: short p99 vs concurrency (by max-num-seqs)</th>
+    <th align="center">BAD: long p99 vs concurrency (by max-num-seqs)</th>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="artifacts/exp4/plots/exp4_bad_short_p99_vs_concurrency_by_max_num_seqs.png" width="460"/>
+    </td>
+    <td align="center">
+      <img src="artifacts/exp4/plots/exp4_bad_long_p99_vs_concurrency_by_max_num_seqs.png" width="460"/>
+    </td>
+  </tr>
+</table>
+
+
+
+
+## Experiment 5: Creating FAIR scheduling (latency ↔ throughput trade-off)
+
+This experiment introduces a **FAIR scheduling / token-budget strategy** to reduce mixed-workload interference (short requests getting stuck behind long-prefill work). We progressively evaluate:
+
+1) a **single sanity-check** (FAIR vs BAD at the same concurrency),
+2) a **1D sweep** over `max-num-batched-tokens` (btok) at two concurrencies,
+3) a **2D grid sweep**: `btok × max-num-seqs` at `c=32`.
+
+---
+
+### 5.1 Fair sanity check (btok=768 @ c=32)
+
+We reduce `max-num-batched-tokens` from the BAD baseline (`8192`) down to **768**, holding everything else constant and testing at **the same concurrency (`c=32`)**.
+
+- **Goal:** verify `btok` is a real lever under mixed 50/50 traffic.
+- **Result (vs BAD @ c=32):**
+  - Overall: **p50 worsens** (**6.04s vs 5.53s**), **p90 improves** (**9.18s vs 10.46s**), **p99 ~flat** (~**11.06s**).
+  - Short: **p50 worsens** (**5.63s vs 4.70s**), **short p99 slightly improves** (**10.08s vs 10.15s**).
+  - Long: **p90 improves** (**10.00s vs 10.96s**), **long p99 ~flat** (~**11.11s vs 11.06s**).
+
+**Interpretation:** lowering btok reshapes the distribution (notably p90), but **does not reliably reduce worst-case p99** at this load.
+
+---
+
+### 5.2 `max-num-batched-tokens` sweep @ c=16
+
+At `c=16`, increasing btok from **256 → 2048** improves both median and tail:
+
+- Overall p99 improves **7.49s → 5.88s** (~**−21.5%**)
+- Long p99 improves **7.64s → 5.97s** (~**−21.9%**)
+- Overall p50 improves **3.92s → 2.88s** (~**−26.6%**)
+
+**Interpretation:** the server is **prefill/batching-throttled** at low btok in this regime.
+
+---
+
+### 5.3 `max-num-batched-tokens` sweep @ c=32 (knee + tail tradeoffs)
+
+At `c=32`, btok acts mainly as a **throughput lever**, while tails are non-monotonic:
+
+- RPS rises **3.97 rps @ 256 → 5.48 rps @ 3072** (**+38.1%**)
+- p50 improves **8.03s @ 256 → 5.13s @ 3072** (**−36.2%**)
+- Beyond **2048–3072**, throughput **plateaus (~5.2–5.5 rps)** while **long/overall tails can worsen**.
+
+
+
+**Interpretation:** under high load, btok tuning alone doesn’t guarantee better p99 — queueing variance dominates.
+
+---
+
+### 5.4 2D sweep: `btok × max-num-seqs` @ c=32
+
+We sweep **btok ∈ {512..8192}** and **max-num-seqs ∈ {32..128}** at `c=32`.
+
+- FAIR throughput varies modestly (**~4.30 → ~5.19 rps**) but tails move a lot.
+- Best short-tail protection observed:
+  - **btok=6144, max-num-seqs=96** → **short p99 ≈ 9.53s** (vs BAD short p99 ≈ **10.15s**; ~**6.1% lower**), but long p99 increases (~**13.09s**).
+- Most conservative long-tail region:
+  - **btok=512, max-num-seqs=32** → **long p99 ≈ 11.80s** (closest-to-best within FAIR), with RPS ≈ **4.77**.
+
+**Takeaway:** there is no single “best” FAIR config — it depends on the SLO:
+- Optimize **short p99** → higher-btok / moderate-seqs region (e.g., `6144 × 96`)
+- Optimize **long p99** → conservative corner (e.g., `512 × 32`)
+- Production choice is typically the **knee**: near-peak RPS without large p99 inflation, then validate via a final concurrency sweep.
+
+---
+
+---
+
+## Artifacts (Exp 5)
+
+### Tables
+- [exp5_fair_c32_btok768.csv](artifacts/exp5/tables/exp5_fair_c32_btok768.csv)
+- [exp5_fair_btok_sweep_c16.csv](artifacts/exp5/tables/exp5_fair_btok_sweep_c16.csv)
+- [exp5_fair_btok_sweep_c32.csv](artifacts/exp5/tables/exp5_fair_btok_sweep_c32.csv)
+- [exp5_fair_c32_btok_max_num_seqs.csv](artifacts/exp5/tables/exp5_fair_c32_btok_max_num_seqs.csv)
+
+---
+
+### Plots (FAIR vs BAD overview)
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <b>FAIR grid: RPS heatmap</b><br/>
+      <img src="artifacts/exp5/plots/exp5_fair_grid_rps_heatmap.png" width="420"/>
+    </td>
+    <td align="center" width="50%">
+      <b>FAIR grid: short p99 heatmap</b><br/>
+      <img src="artifacts/exp5/plots/exp5_fair_grid_short_p99_heatmap.png" width="420"/>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <b>BAD grid: RPS heatmap</b><br/>
+      <img src="artifacts/exp5/plots/exp5_bad_grid_rps_heatmap.png" width="420"/>
+    </td>
+    <td align="center" width="50%">
+      <b>BAD grid: short p99 heatmap</b><br/>
+      <img src="artifacts/exp5/plots/exp5_bad_grid_short_p99_heatmap.png" width="420"/>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <b>FAIR Pareto: RPS vs short p99</b><br/>
+      <img src="artifacts/exp5/plots/exp5_fair_grid_pareto_rps_vs_short_p99.png" width="420"/>
+    </td>
+    <td align="center" width="50%">
+      <b>BAD Pareto: RPS vs short p99</b><br/>
+      <img src="artifacts/exp5/plots/exp5_bad_grid_pareto_rps_vs_short_p99.png" width="420"/>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <b>FAIR vs BAD: RPS vs Δ(short p99)</b><br/>
+      <img src="artifacts/exp5/plots/exp5_fair_vs_bad_rps_vs_delta_short_p99.png" width="420"/>
+    </td>
+    <td align="center" width="50%">
+      <!-- keep empty to preserve alignment -->
+      &nbsp;
+    </td>
+  </tr>
+</table>
+
+---
+
+### Plots (Short p99 vs max-num-seqs slices by token budget)
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <b>Short p99 vs max-num-seqs (btok=512)</b><br/>
+      <img src="artifacts/exp5/plots/exp5_fair_short_p99_vs_max_num_seqs_btok=512.png" width="420"/>
+    </td>
+    <td align="center" width="50%">
+      <b>Short p99 vs max-num-seqs (btok=768)</b><br/>
+      <img src="artifacts/exp5/plots/exp5_fair_short_p99_vs_max_num_seqs_btok=768.png" width="420"/>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <b>Short p99 vs max-num-seqs (btok=1024)</b><br/>
+      <img src="artifacts/exp5/plots/exp5_fair_short_p99_vs_max_num_seqs_btok=1024.png" width="420"/>
+    </td>
+    <td align="center" width="50%">
+      <b>Short p99 vs max-num-seqs (btok=1536)</b><br/>
+      <img src="artifacts/exp5/plots/exp5_fair_short_p99_vs_max_num_seqs_btok=1536.png" width="420"/>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <b>Short p99 vs max-num-seqs (btok=2048)</b><br/>
+      <img src="artifacts/exp5/plots/exp5_fair_short_p99_vs_max_num_seqs_btok=2048.png" width="420"/>
+    </td>
+    <td align="center" width="50%">
+      <b>Short p99 vs max-num-seqs (btok=3072)</b><br/>
+      <img src="artifacts/exp5/plots/exp5_fair_short_p99_vs_max_num_seqs_btok=3072.png" width="420"/>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <b>Short p99 vs max-num-seqs (btok=4096)</b><br/>
+      <img src="artifacts/exp5/plots/exp5_fair_short_p99_vs_max_num_seqs_btok=4096.png" width="420"/>
+    </td>
+    <td align="center" width="50%">
+      <b>Short p99 vs max-num-seqs (btok=6144)</b><br/>
+      <img src="artifacts/exp5/plots/exp5_fair_short_p99_vs_max_num_seqs_btok=6144.png" width="420"/>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <b>Short p99 vs max-num-seqs (btok=8192)</b><br/>
+      <img src="artifacts/exp5/plots/exp5_fair_short_p99_vs_max_num_seqs_btok=8092.png" width="420"/>
+    </td>
+    <td align="center" width="50%">
+      <!-- keep empty to preserve alignment -->
+      &nbsp;
+    </td>
+  </tr>
+</table>
+
+---
+
 
 

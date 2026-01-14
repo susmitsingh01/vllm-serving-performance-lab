@@ -20,14 +20,16 @@ A Colab-driven performance study of the latency–throughput (RPS) tradeoff in v
 
 **Outputs:** Each experiment prints summary tables with **RPS + overall/short/long p50/p90/p99** and saves sweep results (CSV) for resume-capable runs.
 
-## Experiment 1 — Mixed Prompt-Length Workloads (Baseline Stress Test)
+## Experiments and key findings
+
+### Experiment 1 — Mixed Prompt-Length Workloads (Baseline Stress Test)
 
 **Goal:** Establish a baseline for the **latency–throughput tradeoff** under concurrent serving when prompt lengths are mixed. Measure **overall p50/p90/p99 + short p99 vs long p99** and observe interference effects.
 
 **Workloads:** `short_only`, `mix_90_10`, `mix_70_30` (all at fixed concurrency).  
 **Metrics:** success/fail, RPS, overall p50/p90/p99 (+ short/long splits tracked elsewhere in the notebook).
 
-### Key results (c = 8, 200 requests)
+#### Key results (c = 8, 200 requests)
 As the workload includes more long prompts, **tail latency increases and throughput drops**.
 
 - **Throughput (RPS):** `2.53 → 2.29 → 1.96` (short_only → 90/10 → 70/30)
@@ -35,24 +37,22 @@ As the workload includes more long prompts, **tail latency increases and through
 - **Overall p50 latency (s):** `3.55 → 3.62 → 4.10`
 
 **Observed failure mode (important):** With fixed `max_tokens=128`, some mixed-workload requests can hit **context/token-limit overflow** (prompt + output > `max-model-len`), causing **HTTP 400 failures**.  
-➡️ **Experiment 1.1** fixes this via **dynamic context budgeting**: shrink output tokens first, then trim input (head+tail) only if needed.
+**Experiment 1.1** fixes this via **dynamic context budgeting**: shrink output tokens first, then trim input (head+tail) only if needed.
 
-### Takeaways
+#### Takeaways
 - **Mixed prompt lengths create interference:** long-prefill requests push up **tail latency** for everyone and reduce **effective RPS**.
 - **The latency penalty is nonlinear:** moving from 90/10 to 70/30 shows a clear tail expansion (p99 grows faster than p50).
 - **Hard failures can appear with naive token settings:** fixed output caps are not safe under variable prompt lengths without budgeting.
 
-### Artifacts
+#### Artifacts
 **Summary table:** [`artifacts/exp1/tables/exp01_results_summary.csv`](artifacts/exp1/tables/exp01_results_summary.csv)
 
-**Plots:**
-- Latency percentiles by workload:  
-  `artifacts/exp1/plots/exp01_latency_percentiles_by_workload.png`  
-  ![exp01 latency percentiles](artifacts/exp1/plots/exp01_latency_percentiles_by_workload.png)
+**Plots (Exp 1):**
 
-- Throughput (RPS) by workload:  
-  `artifacts/exp1/plots/exp01_throughput_rps_by_workload.png`  
-  ![exp01 throughput](artifacts/exp1/plots/exp01_throughput_rps_by_workload.png)
+| Latency percentiles by workload | Throughput (RPS) by workload |
+|---|---|
+| ![](artifacts/exp1/plots/exp01_latency_percentiles_by_workload.png) | ![](artifacts/exp1/plots/exp01_throughput_rps_by_workload.png) |
+
 
 - Latency histograms
 
@@ -63,6 +63,36 @@ As the workload includes more long prompts, **tail latency increases and through
 | mix_70_30 |  |
 |---|---|
 | ![](artifacts/exp1/plots/exp01_latency_hist_mix_70_30.png) |  |
+
+
+### Experiment 1.1 — Dynamic Context Budgeting (Prevent Token-Limit 400s)
+
+**Goal:** Eliminate **HTTP 400 context/token-limit failures** caused by naive fixed `max_tokens` when prompt lengths vary. Guarantee a minimum completion size while keeping requests within `max-model-len`.
+
+**What changed vs Exp 1:** Instead of always using a fixed output cap (e.g., `max_tokens=128`), the notebook builds each request with a **token budget**:
+
+1. **Estimate prompt tokens** using the model’s chat template (`apply_chat_template`).
+2. **Shrink output tokens first**:  
+   `max_out = min(desired_max_tokens, MAX_MODEL_LEN - safety_margin - prompt_tokens)`
+3. If there still isn’t room for a minimum output (`max_out < MIN_OUTPUT_TOKENS`), **trim the input** (user content only) using a **head+tail token trim** (keeps the start + end, drops the middle) until the prompt fits.
+4. Final guard ensures `max_out > 0`, otherwise error.
+
+This preserves “what matters” in long prompts (instructions at the start + relevant details near the end) while ensuring the server never receives an over-limit request.
+
+#### Key results (c = 8, 200 requests)
+With dynamic budgeting enabled, the same workloads complete **without failures** (no token-limit 400s), while keeping latency/throughput behavior comparable to Exp 1.
+
+- **Failures:** `0/200` for `short_only`, `mix_90_10`, `mix_70_30`
+- **Throughput (RPS):** `2.52 → 2.27 → 1.94`
+- **Overall p99 latency (s):** `3.58 → 4.53 → 5.39`
+
+#### Takeaways
+- **Dynamic max_tokens is mandatory under variable prompt lengths** if you want reliability (prevents hard 400s).
+- **Best-first strategy:** shrink output tokens before touching the prompt; only trim input when absolutely required.
+- **Head+tail trimming is a safe fallback** for extreme prompts because it preserves both instructions (head) and the most recent/likely-relevant content (tail).
+
+#### Artifacts
+**Summary table:** [`artifacts/exp1_1/tables/exp01_1_results_summary.csv`](artifacts/exp1_1/tables/exp01_1_results_summary.csv)
 
 
 
